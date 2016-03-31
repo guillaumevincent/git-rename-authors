@@ -1,8 +1,8 @@
 import collections
 import unittest
 
-from script import get_script
 from authors import get_list_authors, merge_authors, parse_authors
+from script import get_script
 
 
 class CleanGitRepoTestCase(unittest.TestCase):

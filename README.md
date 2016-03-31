@@ -2,6 +2,8 @@
 
 I've created a script that will change any commits that previously had bad email address in its author or committer fields to use the correct name and email address.
 
+version 0.0.2
+
 ## requirements
 
  - python 3.5 (check with `python3 --version`)
@@ -14,7 +16,7 @@ I've created a script that will change any commits that previously had bad email
 
 ## installing
 
-    pip install clean-git
+    pip install cleangit
 
 ## running
 
@@ -25,6 +27,17 @@ Create a fresh, bare clone of your repository:
 
 simply run in a terminal
 
-    clean-git
+    cleangit
+
+
+## License
+
+SmartConfigParser's License is the WTFPL – Do What the Fuck You Want to Public License.
+
+        DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+0. You just DO WHAT THE FUCK YOU WANT TO.
+
 
 
