@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/guillaumevincent/clean-git.svg)](https://travis-ci.org/guillaumevincent/clean-git)
+[![Build Status](https://travis-ci.org/guillaumevincent/clean-git.svg?branch=master)](https://travis-ci.org/guillaumevincent/clean-git)
 
 
 # Cleaning author in git repository by changing the Git history using a script
