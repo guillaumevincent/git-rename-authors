@@ -6,8 +6,8 @@ import tkinter
 import tkinter.messagebox
 import tkinter.ttk
 
-from authors import get_list_authors, merge_authors, parse_authors
-from script import get_script
+from cleangit.authors import get_list_authors, merge_authors, parse_authors
+from cleangit.script import get_script
 
 
 def git_push():

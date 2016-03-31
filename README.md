@@ -1,8 +1,16 @@
+[![Build Status](https://travis-ci.org/guillaumevincent/clean-git.svg)](https://travis-ci.org/guillaumevincent/clean-git)
+
+
 # Cleaning author in git repository by changing the Git history using a script
 
 I've created a script that will change any commits that previously had bad email address in its author or committer fields to use the correct name and email address.
+Usefull when you want to fix error in graph for example.
 
-version 0.0.2
+
+version 0.0.7
+
+![](screenshot.png?raw=true)
+
 
 ## requirements
 
@@ -27,7 +35,7 @@ Create a fresh, bare clone of your repository:
 
 simply run in a terminal
 
-    cleangit
+    clean-git
 
 
 ## License
