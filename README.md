@@ -1,13 +1,13 @@
 [![Build Status](https://travis-ci.org/guillaumevincent/clean-git.svg?branch=master)](https://travis-ci.org/guillaumevincent/clean-git)
 
 
-# Cleaning author in git repository by changing the Git history using a script
+# Clean git : clean the authors of your deposit git
 
-I've created a script that will change any commits that previously had bad email address in its author or committer fields to use the correct name and email address.
-Usefull when you want to fix error in graph for example.
+Clean git is an interface to help clean authors and emails a repository git. This is an interface to perform an improved version of the github script : https://help.github.com/articles/changing-author-info/
 
 
-version 0.0.7
+
+version 0.0.8
 
 ![](screenshot.png?raw=true)
 
@@ -17,7 +17,7 @@ version 0.0.7
  - python 3.5 (check with `python3 --version`)
  - pip (check with `pip --version`)
  - git (check with `git --version`)
- - unix system (On windows, you probably need cygwin)
+ - unix system (I haven't tested on windows, it probably works on cygwin)
 
 **Warning**: This action is destructive to your repository's history. If you're collaborating on a repository with others, it's considered bad practice to rewrite published history. You should only do this in an emergency.
 

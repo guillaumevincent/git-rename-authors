@@ -9,6 +9,8 @@ import tkinter.ttk
 from cleangit.authors import get_list_authors, merge_authors, parse_authors
 from cleangit.script import get_script
 
+git_filter_ok = False
+
 
 def git_push():
     if git_filter_ok:
@@ -57,7 +59,6 @@ def start():
 
     authors = parse_authors(stdout)
     merged_authors = {}
-    git_filter_ok = False
 
     def update_merge_author():
         ids_to_merge = authors_list_widget.curselection()
@@ -80,15 +81,15 @@ def start():
 
     width = 50
     # widgets
-    explanation1 = tkinter.ttk.Label(text='Select every emails you want to merge')
+    explanation1 = tkinter.ttk.Label(text='Select emails to merge')
     authors_display = tkinter.StringVar(value=get_list_authors(authors))
     authors_list_widget = tkinter.Listbox(width=width, selectmode='extended', listvariable=authors_display,
                                           exportselection=0)
-    explanation2 = tkinter.Label(text='Select email, you want to merge in')
+    explanation2 = tkinter.Label(text='Select the target email')
     destination_email_text = tkinter.StringVar(value=get_list_authors(authors)[0])
     destination_email_widget = tkinter.ttk.Combobox(textvariable=destination_email_text)
     merge_btn = tkinter.Button(text='1 - merge', command=update_merge_author, bg="green")
-    explanation3 = tkinter.ttk.Label(text='Emails to be merged:')
+    explanation3 = tkinter.ttk.Label(text='List of emails after')
     logs_widget = tkinter.ttk.Label()
     git_filter_btn = tkinter.Button(text="2 - Git filter", command=git_filter_cmd, bg="orange")
     git_push_btn = tkinter.Button(text="3 - Git push force", command=git_push, bg="red")
