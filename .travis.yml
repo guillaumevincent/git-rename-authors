@@ -1,4 +1,4 @@
 language: python
 python:
-    - 3.5
-script: python cleangit/tests.py
+    - 3
+script: python git_rename_authors/tests.py
