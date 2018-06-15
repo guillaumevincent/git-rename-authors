@@ -23,7 +23,7 @@ def git_filter(source_authors, destination_author):
         tkinter.messagebox.showinfo(title='Success',
                                     message="Review the new Git history for errors.\nIf you want to delete the ref created, just run:\ngit update-ref -d refs/original/refs/heads/master")
         os.remove('./{}'.format(script_name))
-        print("git update-ref -d refs/original/refs/heads/master")
+        print("Review the new Git history for errors.\nIf you want to delete the ref created, just run:\ngit update-ref -d refs/original/refs/heads/master")
     except Exception as e:
         with open('error.log', 'w') as f:
             f.write(str(e))

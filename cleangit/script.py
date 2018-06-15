@@ -23,8 +23,8 @@ fi
     script = """
 #!/bin/sh
 # https://help.github.com/articles/changing-author-info/
-git config user.name {good_name}
-git config user.email {good_email}
+git config user.name "{good_name}"
+git config user.email "{good_email}"
 git filter-branch -f --env-filter '
 {env_filter}
 ' --tag-name-filter cat -- --branches --tags

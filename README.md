@@ -1,6 +1,5 @@
 [![Build Status](https://travis-ci.org/guillaumevincent/clean-git.svg?branch=master)](https://travis-ci.org/guillaumevincent/clean-git)
 
-
 # Clean git : clean the authors of your git repository
 
 Clean git is an interface to help clean authors and emails a git repository. This is an interface to perform an improved version of the github script : https://help.github.com/articles/changing-author-info/
