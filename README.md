@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/guillaumevincent/clean-git.svg?branch=master)](https://travis-ci.org/guillaumevincent/clean-git)
+[![Build Status](https://travis-ci.org/guillaumevincent/git-rename-authors.svg?branch=master)](https://travis-ci.org/guillaumevincent/git-rename-authors)
 
 # git-rename-authors : clean the authors of your git repository
 

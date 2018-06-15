@@ -5,7 +5,7 @@ from authors import get_list_authors, parse_authors
 from script import generate_script
 
 
-class CleanGitRepoTestCase(unittest.TestCase):
+class UnitTests(unittest.TestCase):
     def test_parse_authors(self):
         stdout = 'Guillaume Vincent;test@oslab.fr\nGuillaume Vincent;test2@oslab.fr\nGuillaume VINCENT;test2@oslab.fr\n\n'
         expected_authors = [{'email': 'test@oslab.fr', 'name': 'Guillaume Vincent'},

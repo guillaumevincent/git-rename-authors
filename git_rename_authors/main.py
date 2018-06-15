@@ -20,10 +20,10 @@ def git_filter(source_authors, destination_author):
                        stdout=subprocess.PIPE, shell=True)
         subprocess.run('./{}'.format(script_name),
                        stdout=subprocess.PIPE, shell=True)
-        tkinter.messagebox.showinfo(title='Success',
-                                    message="Review the new Git history for errors.\nIf you want to delete the ref created, just run:\ngit update-ref -d refs/original/refs/heads/master")
+        tkinter.messagebox.showinfo(
+            title='Success', message="Review the new Git history for errors.")
         os.remove('./{}'.format(script_name))
-        print("Review the new Git history for errors.\nIf you want to delete the ref created, just run:\ngit update-ref -d refs/original/refs/heads/master")
+        print("Review the new Git history for errors.\nIf you want to delete the refs created, just run:\ngit for-each-ref --format=\"%(refname)\" refs/original/ | xargs -n 1 git update-ref -d")
     except Exception as e:
         with open('error.log', 'w') as f:
             f.write(str(e))
