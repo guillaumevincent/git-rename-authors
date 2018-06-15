@@ -6,46 +6,49 @@ import tkinter
 import tkinter.messagebox
 import tkinter.ttk
 
-from cleangit.authors import get_list_authors, merge_authors, parse_authors
-from cleangit.script import get_script
-
-git_filter_ok = False
+from cleangit.authors import get_list_authors, parse_authors
+from cleangit.script import generate_script
 
 
-def git_push():
-    if git_filter_ok:
-        gp = subprocess.run("git push --force --tags origin 'refs/heads/*'", stdout=subprocess.PIPE, shell=True)
-        if gp.returncode == 1:
-            tkinter.messagebox.showerror(title='Error', message="failed to push some refs")
-        else:
-            tkinter.messagebox.showinfo(title='Success',
-                                        message="Thank you for using clean-git-authors. Created by @guillaume20100.")
-        sys.exit(-1)
-    else:
-        tkinter.messagebox.showerror(title='Error', message='Git filter first')
-
-
-def git_filter(merged_authors):
+def git_filter(source_authors, destination_author):
     try:
-        script = get_script(merged_authors)
+        script = generate_script(source_authors, destination_author)
         script_name = 'git-authors-rewrite.sh'
         with open(script_name, 'w') as script_sh:
             script_sh.write(script)
-        subprocess.run('chmod +x ./{}'.format(script_name), stdout=subprocess.PIPE, shell=True)
-        subprocess.run('./{}'.format(script_name), stdout=subprocess.PIPE, shell=True)
+        subprocess.run('chmod +x ./{}'.format(script_name),
+                       stdout=subprocess.PIPE, shell=True)
+        subprocess.run('./{}'.format(script_name),
+                       stdout=subprocess.PIPE, shell=True)
         tkinter.messagebox.showinfo(title='Success',
-                                    message="Review the new Git history for errors and git push")
-        global git_filter_ok
-        git_filter_ok = True
+                                    message="Review the new Git history for errors.\nIf you want to delete the ref created, just run:\ngit update-ref -d refs/original/refs/heads/master")
         os.remove('./{}'.format(script_name))
+        print("git update-ref -d refs/original/refs/heads/master")
     except Exception as e:
         with open('error.log', 'w') as f:
             f.write(str(e))
-        tkinter.messagebox.showerror(title='Error', message='cannot git filter, see error.log')
+        tkinter.messagebox.showerror(
+            title='Error', message='En error occured, see error.log')
+
+
+def show_preview(source_authors, destination_author):
+    if not len(source_authors):
+        return 'you should select an email to be replaced by "%s"' % destination_author
+    s = ''
+    for author in source_authors:
+        source_author = '%s <%s>' % (author['name'], author['email'])
+        if (source_author == destination_author.strip()):
+            s += '"%s" will be ignored\n' % destination_author
+        else:
+            s += '"%s" will be replaced by "%s"\n' % (
+                source_author, destination_author)
+
+    return s
 
 
 def start():
-    process = subprocess.run("git log --pretty=\"%an;%ae%n%cn;%ce\" | sort | uniq", stdout=subprocess.PIPE, shell=True)
+    process = subprocess.run(
+        "git log --pretty=\"%an;%ae%n%cn;%ce\" | sort | uniq", stdout=subprocess.PIPE, shell=True)
 
     stdout = process.stdout.decode('utf-8')
     if len(stdout) == 0:
@@ -58,41 +61,45 @@ def start():
     root.columnconfigure(0, weight=1)
 
     authors = parse_authors(stdout)
-    merged_authors = {}
 
-    def update_merge_author():
-        ids_to_merge = authors_list_widget.curselection()
-        merge_to_id = destination_email_widget.current()
-        merged_authors.update(merge_authors(authors, ids_to_merge, merge_to_id))
-        logs_widget['text'] = json.dumps(merged_authors, indent=2)
+    def preview():
+        source_authors = [authors[i]
+                          for i in authors_list_widget.curselection()]
+        destination_author = destination_author_field.get()
+        logs_widget['text'] = show_preview(source_authors, destination_author)
 
-    def git_filter_cmd():
-        if not merged_authors:
-            tkinter.messagebox.showerror(title='Error', message='merged authors cannot be empty')
-            return
-
+    def replace_emails():
         result = tkinter.messagebox.askquestion("Git filter",
                                                 "Warning: This action is destructive to your repository's history. If you're collaborating on a repository with others, it's considered bad practice to rewrite published history. You should only do this in an emergency. Are you sure you want to rewrite your history ?",
                                                 icon='warning')
         if result != 'yes':
             return
+        source_authors = [authors[i]
+                          for i in authors_list_widget.curselection()]
+        destination_author = destination_author_field.get()
+        git_filter(source_authors, destination_author)
 
-        git_filter(merged_authors)
-
-    width = 50
+    width = 100
     # widgets
-    explanation1 = tkinter.ttk.Label(text='Select emails to merge')
+    explanation1 = tkinter.ttk.Label(
+        text='1 - Select one or more emails you want to replace')
     authors_display = tkinter.StringVar(value=get_list_authors(authors))
-    authors_list_widget = tkinter.Listbox(width=width, selectmode='extended', listvariable=authors_display,
-                                          exportselection=0)
-    explanation2 = tkinter.Label(text='Select the target email')
-    destination_email_text = tkinter.StringVar(value=get_list_authors(authors)[0])
-    destination_email_widget = tkinter.ttk.Combobox(textvariable=destination_email_text)
-    merge_btn = tkinter.Button(text='1 - merge', command=update_merge_author, bg="green")
-    explanation3 = tkinter.ttk.Label(text='List of emails after')
+    authors_list_widget = tkinter.Listbox(
+        width=width,
+        selectmode='extended',
+        listvariable=authors_display,
+        exportselection=0
+    )
+    explanation2 = tkinter.Label(
+        text='2 - Enter the name and the destination email')
+    destination_author_field = tkinter.Entry()
+    destination_author_field.insert(
+        tkinter.INSERT, get_list_authors(authors)[0])
+    merge_btn = tkinter.Button(
+        text='3 - Click me to preview changes', command=preview, bg="green")
     logs_widget = tkinter.ttk.Label()
-    git_filter_btn = tkinter.Button(text="2 - Git filter", command=git_filter_cmd, bg="orange")
-    git_push_btn = tkinter.Button(text="3 - Git push force", command=git_push, bg="red")
+    git_filter_btn = tkinter.Button(
+        text="4 - Click me to replace the emails", command=replace_emails, bg="orange")
 
     # rendering
     explanation1.grid(row=0, column=0, sticky="w", padx=10, pady=10)
@@ -100,13 +107,10 @@ def start():
     for i in range(0, len(authors), 2):
         authors_list_widget.itemconfigure(i, background='#f0f0ff')
     explanation2.grid(row=4, column=0, sticky="w", padx=10, pady=10)
-    destination_email_widget.grid(row=6, column=0, sticky="nsew", padx=10)
-    destination_email_widget['values'] = get_list_authors(authors)
+    destination_author_field.grid(row=6, column=0, sticky="nsew", padx=10)
     merge_btn.grid(row=8, column=0, sticky="nsew", padx=10, pady=10)
-    explanation3.grid(row=10, column=0, sticky="w", padx=10)
     logs_widget.grid(row=12, column=0, sticky="w", padx=10, pady=10)
     git_filter_btn.grid(row=14, column=0, sticky="nsew", padx=10, pady=10)
-    git_push_btn.grid(row=16, column=0, sticky="nsew", padx=10, pady=10)
     root.mainloop()
 
 
